@@ -1,0 +1,41 @@
+node {
+    
+    def mvnHome = tool name: 'maven-3.6.0' , type: 'maven'
+    
+    stage('checkoutCode') {
+        
+        git branch: 'dev', credentialsId: 'eee93307-b335-4d3c-ab4b-6e420659b90c', url: 'https://github.com/creativeidles-devops/Maven-web.git'
+        
+    }
+    
+    stage('buildMaven'){
+        
+        sh "${mvnHome}/bin/mvn clean package"
+    }
+    
+    stage('executeSonarReport'){
+        
+        sh "${mvnHome}/bin/mvn sonar:sonar"
+    }
+    
+    stage('uploadArtifactNexus'){
+        
+        sh "${mvnHome}/bin/mvn deploy"
+    }
+    
+    stage('deployWarTomcat'){
+        
+        sshagent(['tomcat-pipeline']) {
+        sh "scp -o  StrictHostKeyChecking=no  target/maven-web-application.war ec2-user@35.154.23.84:/opt/apache-tomcat-9.0.20/webapps/maven-web-application.war"
+    }
+    
+    stage('emailNotification'){
+        
+        mail bcc: '', body: '''FYI,
+
+Regards,
+devops''', cc: 'moneyisnotworld@gmail.com', from: '', replyTo: '', subject: 'Build notification', to: 'moneyisnotworld@gmail.com'
+    }
+    
+    }
+}
