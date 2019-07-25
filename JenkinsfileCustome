@@ -18,10 +18,10 @@ node {
         sh "${mvnHome}/bin/mvn sonar:sonar"
     }
     
-    stage('uploadArtifactNexus'){
+   */ stage('uploadArtifactNexus'){
         
         sh "${mvnHome}/bin/mvn deploy"
-    }
+    } /*
     
     stage('deployWarTomcat'){
         
