@@ -4,7 +4,7 @@ node {
     
     stage('checkoutCode') {
         
-        git branch: 'master', credentialsId: 'eee93307-b335-4d3c-ab4b-6e420659b90c', url: 'https://github.com/creativeidles-devops/Maven-web.git'
+        git credentialsId: 'eee93307-b335-4d3c-ab4b-6e420659b90c', url: 'https://github.com/creativeidles-devops/Maven-web.git'
         
     }
     
